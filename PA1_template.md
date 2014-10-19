@@ -134,7 +134,6 @@ First we will separate weekends from weekdays using the date with imputed missin
 
 
 ```r
-activityIMV$wday <- as.factor(ifelse(as.POSIXlt(activity$date)$wday %% 6 == 0, "Weekend", "Weekday"));
 activityIMV$dayofweek <- sapply(activityIMV$date, FUN = weekdays)
 
 wday <- function(date) {
@@ -144,21 +143,16 @@ wday <- function(date) {
 activityIMV$wday <- sapply(activityIMV$dayofweek, FUN = wday)
 ```
 
-Let's create a plot 
+Let's see the difference between the averge number of steps taken on weekdays and weekends.
 
 
 ```r
-aggr <- aggregate(steps ~ interval + wday, data=activityIMV, mean)
+aggr <- aggregate(steps ~ interval + wday + dayofweek , data=activityIMV, mean)
 
 ggplot(aggr, aes(interval, steps)) + 
     facet_grid(wday ~ .) + 
     geom_line() +
     xlab("Interval") + ylab("Number of steps")
-```
-
-```
-## geom_path: Each group consist of only one observation. Do you need to adjust the group aesthetic?
-## geom_path: Each group consist of only one observation. Do you need to adjust the group aesthetic?
 ```
 
 ![plot of chunk unnamed-chunk-9](./PA1_template_files/figure-html/unnamed-chunk-9.png) 
